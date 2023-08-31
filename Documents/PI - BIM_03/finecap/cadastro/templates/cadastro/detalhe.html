@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block center %}
+  <div class="container-fluid mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card mb-4 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">{{ reserva.nome_empresa }}</h5>
+            <p class="card-text">{{ reserva.cnpj }}</p>
+            <p class="card-text">{{ reserva.categoria_empresa }}</p>
+            <div class="d-flex justify-content-between align-items-center info">
+              <div class="info">
+              <div>
+                <small class="text-muted">Localização: {{ reserva.stand }}</small>
+              </div>
+              <div>
+                <small class="text-muted">Valor: R${{ reserva.stand.valor }}</small>
+              </div>
+              <div>
+                <small class="text-muted"> Situação:   
+                  {% if reserva.quitado %}
+                  Quitado
+                  {% else %}
+                  Não quitado
+                  {% endif %}
+                  </small>
+              </div>
+            </div>
+            </div>
+            </div>
+            <a href="{% url 'reserva_remover' id=reserva.id %}" class="btn btn-danger btn-sm">Remover</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
