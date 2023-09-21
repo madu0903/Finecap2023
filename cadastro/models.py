@@ -16,3 +16,6 @@ class Reserva(models.Model):
     quitado=models.BooleanField()
     stand=models.ForeignKey(Stand, on_delete=models.CASCADE)
     data=models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.cnpj
