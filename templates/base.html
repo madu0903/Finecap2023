@@ -20,7 +20,12 @@
 <body>
     <nav class="navbar nav-bar sticky-top flex-md-nowrap p-0">
         <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#"> FINECAP 2023</a>
-
+                {% if user.is_authenticated %}
+                    <span style="color:white"><h2>Bem-vindo(a), {{ user.username }}! </h2></span>
+                {% endif %}
+                <a class="nav-link" href="{% url 'logout' %}"  style="font-size:18px; font-weight:600; color:#F96E46">Sign out</a>
+            </div>
+            
     </nav>
     <div class="container-fluid">
         <div class="row">

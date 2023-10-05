@@ -1,15 +1,42 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render,get_object_or_404,redirect
 from .models import Reserva
-from .forms import ReservaForm  
-from django.core.paginator import Paginator  
+from .forms import ReservaForm
+from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
-# def reserva_listar(request):
-#     reservas = Reserva.objects.all().order_by('data')
-#     context = {
-#         'reservas': reservas
-#     }
-#     return render(request, 'cadastro/index.html', context)
+@login_required(login_url='/accounts/login')
+def reserva_detalhar(request,id):
+    reserva = get_object_or_404(Reserva, id=id)
+    context={
+        'reserva' : reserva,
+    }
+    return render(request,'cadastro/detalhe.html',context)
 
+
+@login_required(login_url='/accounts/login')
+def reserva_remover(request, id):
+    produto = get_object_or_404(Reserva, id = id)
+    produto.delete()
+    return redirect('index')
+
+
+@login_required(login_url='/accounts/login')
+def reserva_criar(request):
+    if request.method == 'POST':
+        form = ReservaForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            form = ReservaForm()
+            return redirect('index')
+        else:
+            print(form.errors)
+    else:
+        form = ReservaForm()
+
+    return render(request, 'cadastro/form.html', {'form': form})
+
+
+@login_required(login_url='/accounts/login')
 def reserva_listar(request):
     reservas = Reserva.objects.all().order_by('data')
     paginator = Paginator(reservas, 5)
@@ -31,32 +58,5 @@ def reserva_listar(request):
     context ={
         'pag_obj':pag_obj
     }
+
     return render(request, "cadastro/index.html",context)
-
-def reserva_remover(request, id):
-    produto = get_object_or_404(Reserva, id = id)
-    produto.delete()
-    return redirect('index')
-
-def reserva_criar(request):
-    if request.method == 'POST':
-        form = ReservaForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('index')
-        else:
-            print(form.errors)
-    else:
-        form = ReservaForm()
-
-    return render(request, 'cadastro/form.html', {'form': form})
-
-def reserva_detalhar(request,id):
-    reserva = get_object_or_404(Reserva, id=id)
-    context={
-        'reserva' : reserva,
-    }
-    return render(request,'cadastro/detalhe.html',context)
-
-
-
